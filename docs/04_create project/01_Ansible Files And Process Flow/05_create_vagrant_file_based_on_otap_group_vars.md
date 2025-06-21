@@ -12,7 +12,7 @@ This document explains each core file used in an Ansible + Vagrant + Libvirt mul
 
 Below is an example of a valid Ansible inventory layout with static IPv4 assignments for all PostgreSQL nodes across OTAP environments:
 
-```yaml
+````yaml
 all:
   children:
     development:
@@ -74,7 +74,6 @@ all:
               ansible_host: 192.168.56.43
             db_p_dbbds2_repl:
               ansible_host: 192.168.56.44
-```
 ```yaml
 all:
   children:
@@ -121,7 +120,7 @@ all:
           hosts:
             db_p_dbbds2_prim:
             db_p_dbbds2_repl:
-```
+````
 
 Each `host:` entry must resolve either by DNS or be mapped via `/etc/hosts` or Vagrant private IP provisioning.
 
@@ -162,3 +161,50 @@ To bind hostnames like `db_d_dbbds1_prim` to real IPs, you can:
 Let me know if you'd like a sample full `hosts.yml` with embedded IPs.
 
 Let me know if you want to generate a dynamic script to build the `inventory/hosts.yml` file from the JSON structure as well.
+
+### 📦 Sample `Vagrantfile` for All OTAP PostgreSQL VMs
+
+Below is a sample `Vagrantfile` that provisions all OTAP nodes defined in the inventory, matching each hostname to its corresponding IPv4 address:
+
+```ruby
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/8"
+
+  nodes = {
+    "db_d_dbbds1_prim" => "192.168.56.11",
+    "db_d_dbbds1_repl" => "192.168.56.12",
+    "db_d_dbbds2_prim" => "192.168.56.13",
+    "db_d_dbbds2_repl" => "192.168.56.14",
+
+    "db_t_dbbds1_prim" => "192.168.56.21",
+    "db_t_dbbds1_repl" => "192.168.56.22",
+    "db_t_dbbds2_prim" => "192.168.56.23",
+    "db_t_dbbds2_repl" => "192.168.56.24",
+
+    "db_a_dbbds1_prim" => "192.168.56.31",
+    "db_a_dbbds1_repl" => "192.168.56.32",
+    "db_a_dbbds2_prim" => "192.168.56.33",
+    "db_a_dbbds2_repl" => "192.168.56.34",
+
+    "db_p_dbbds1_prim" => "192.168.56.41",
+    "db_p_dbbds1_repl" => "192.168.56.42",
+    "db_p_dbbds2_prim" => "192.168.56.43",
+    "db_p_dbbds2_repl" => "192.168.56.44"
+  }
+
+  nodes.each do |name, ip|
+    config.vm.define name do |node|
+      node.vm.hostname = name
+      node.vm.network "private_network", ip: ip
+      node.vm.provider :libvirt do |v|
+        v.memory = 1024
+        v.cpus = 1
+      end
+    end
+  end
+end
+```
+
+> 💡 This Vagrantfile assumes you're using CentOS 8 minimal. Adjust box name and resources (memory, CPUs) as needed.
+
+Let me know if you'd like a shell script to auto-generate this `Vagrantfile` from JSON.
