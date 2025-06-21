@@ -77,7 +77,7 @@ lsblk
 sudo fdisk -l
 ```
 
-Look for partitions labeled as `ntfs` or clearly marked for Windows (e.g., `/dev/sda3` with label `Windows`).
+Look for partitions labeled as `ntfs` or clearly marked for Windows (e.g., `/dev/nvme0n1p2`, `/dev/nvme0n1p3`, `/dev/nvme0n1p4`).
 
 ### 💣 Step 2: Delete Old Windows Partitions
 
@@ -88,29 +88,61 @@ sudo apt install -y gparted
 sudo gparted
 ```
 
-* Select your disk (e.g., `/dev/sda`)
+* Select your disk (e.g., `/dev/nvme0n1`)
 * Delete the Windows partitions (typically NTFS)
 * Apply the changes
 
-### 🧱 Step 3: Expand Existing Linux Partition
+### 🧱 Step 3: Reformat Unallocated Space and Mount It
 
-Still using `gparted`, right-click your main Linux (`ext4`) partition and choose **Resize/Move** to fill the unallocated space.
+Instead of merging, create a new partition. Be sure to check the exact partition name created (e.g., `/dev/nvme0n1p3`, `/dev/nvme0n1p5`, etc.).
 
-### 🆗 Step 4: Confirm Filesystem Integrity
-
-```bash
-sudo resize2fs /dev/sdXn   # Replace with actual partition
-```
-
-### 🧾 Final Check
+If you try to run:
 
 ```bash
-df -h
+sudo mkfs.ext4 /dev/nvme0n1pX
 ```
 
-You should now see increased space available under `/home` or `/`.
+Make sure you replace `X` with the actual number shown in GParted after creation.
 
-> 🛑 **Backup your system before modifying partitions!**
+**Incorrect Example Output:**
+
+```
+The file /dev/nvme0n1pX does not exist and no size was specified.
+mount: special device /dev/nvme0n1pX does not exist.
+```
+
+This means the partition wasn't created yet or the wrong name was used.
+
+After confirming the correct name:
+
+```bash
+sudo mkfs.ext4 /dev/nvme0n1p3
+sudo mkdir /mnt/data
+sudo mount /dev/nvme0n1p3 /mnt/data
+```
+
+### 📌 Optional: Make It Permanent
+
+Get UUID:
+
+```bash
+sudo blkid
+```
+
+Then add to `/etc/fstab`:
+
+```ini
+UUID=<your-uuid> /mnt/data ext4 defaults 0 2
+```
+
+### 🚚 Optional: Move Large Files to New Partition
+
+```bash
+mv ~/VirtualBoxVMs /mnt/data/
+ln -s /mnt/data/VirtualBoxVMs ~/VirtualBoxVMs
+```
+
+> 🛑 **Make sure not to delete the Debian system partition. Always backup your important data before changing partitions.**
 
 ---
 
