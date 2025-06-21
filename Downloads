@@ -1,0 +1,48 @@
+.
+├── ansible
+│   └── inventory
+│       └── hosts.yml
+├── create_local_project
+│   ├── create_group_vars_for_otap_final.json
+│   ├── create_group_vars_for_otap_final.py
+│   ├── create_group_vars_structure.py
+│   ├── system_report.txt
+│   ├── unzip_with_timestamp.py
+│   └── unzip_with_timestamp.sh
+├── docs
+│   ├── 01_installation
+│   │   ├── 01_Install Virtualbox Debian12
+│   │   │   └── Install Virtualbox Debian12_.md
+│   │   ├── 02_Unzip Google Zip Files
+│   │   │   └── Install - Unzip Google Drive Zip Files.md
+│   │   └── 03_Install Vagrant Ansible on Debian12VDI
+│   │       ├── 01_Install Vagrant Ansible Debian12.md
+│   │       ├── 02_Install Vagrant Ansible Debian12.md
+│   │       ├── 03_Generate_System_Information_Log.md
+│   │       ├── 04_Reclaim_All_Storage_Space_From_Old_Windows_Partition.md
+│   │       └── 05_Use_UUID_For_Reclaiming_The_Windows_Storage_.md
+│   ├── 02_configurations
+│   │   └── Debian12 Performance & Sleep Fixes_.md
+│   ├── 03_virtualization
+│   │   ├── 01_Libvirt For Multiple Vms_.md
+│   │   ├── 02_Libvirt with Vagrant and Ansible_.md
+│   │   └── 03_Libvirt_DebianVDI_And_NginX_.md
+│   ├── 04_create project
+│   │   ├── 01_Ansible Files And Process Flow
+│   │   │   ├── 01_Ansible Files And Process Flow_.md
+│   │   │   ├── 02_create_group_vars_structure.md
+│   │   │   ├── 03_create_group_vars_structure_for_otap_final_.md
+│   │   │   ├── 04_create_inventory_hosts.yml_file_for_otap_group_vars.md
+│   │   │   └── 05_create_vagrant_file_based_on_otap_group_vars.md
+│   │   ├── 01_Ansible , Vagrant & Libvirt For Multiple Vms_.md
+│   │   ├── 02_Create GitHub repository for the project_.md
+│   │   └── README.md
+│   └── 05_miscellaneous
+│       └── 01_Yt-dlp Debian12 Guide.md
+├── README.md
+├── tree.txt
+└── vagrant
+    └── vagrantfile
+/F  [error opening dir]
+
+15 directories, 30 files
