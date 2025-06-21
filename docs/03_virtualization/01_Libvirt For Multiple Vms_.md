@@ -199,7 +199,7 @@ Sample playbook to define a VM:
 ## 📌 Best Practices
 
 * Use `qcow2` format for snapshots and compression.
-* Backup XML definitions: `virsh dumpxml vm_name > vm_name.xml`
+* Backup XML definitions: `virsh dumpxml vm_name > vm_name.xml` 
 * Use bridged networking for VM-to-LAN communication.
 * Use LVM or ZFS for performance storage if hosting many VMs.
 * Use Ansible for idempotent VM deployment and Vagrant for reproducible development environments.
