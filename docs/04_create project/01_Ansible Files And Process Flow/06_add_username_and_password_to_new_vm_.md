@@ -43,6 +43,30 @@ Vagrant.configure("2") do |config|
 end
 ```
 
+### 🔄 Destroy and Recreate VM to Apply Username/Password Updates
+
+To recreate a VM after updating its configuration (e.g. username or password), follow these steps:
+
+1. **Destroy the current VM**:
+
+   ```bash
+   vagrant destroy db_d_dbbds1_prim --provider=libvirt -f
+   ```
+
+   > `-f` forces the destruction without asking for confirmation.
+
+2. **Recreate the VM with updated provisioning**:
+
+   ```bash
+   vagrant up db_d_dbbds1_prim --provider=libvirt
+   ```
+
+   This will apply the latest changes in the Vagrantfile, including the updated username/password setup.
+
+> 🔁 Repeat the process for any VM whose settings you’ve updated.
+
+---
+
 ### 🔐 Setting Username & Password for VMs
 
 To set a default **username and password** for new VMs created by Vagrant and Libvirt, you can use a shell provisioner block inside the VM definition:
