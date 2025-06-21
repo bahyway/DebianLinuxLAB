@@ -1,0 +1,38 @@
+  Vagrant.configure("2") do |config|
+    config.vm.box = "centos/8"
+
+    nodes = {
+      "db_d_dbbds1_prim" => "192.168.56.11"
+      #,
+    # "db_d_dbbds1_repl" => "192.168.56.12",
+    # "db_d_dbbds2_prim" => "192.168.56.13",
+    # "db_d_dbbds2_repl" => "192.168.56.14",
+
+    # "db_t_dbbds1_prim" => "192.168.56.21",
+    # "db_t_dbbds1_repl" => "192.168.56.22",
+    # "db_t_dbbds2_prim" => "192.168.56.23",
+    # "db_t_dbbds2_repl" => "192.168.56.24",
+
+    # "db_a_dbbds1_prim" => "192.168.56.31",
+    # "db_a_dbbds1_repl" => "192.168.56.32",
+    #  "db_a_dbbds2_prim" => "192.168.56.33",
+    #  "db_a_dbbds2_repl" => "192.168.56.34",
+
+    #  "db_p_dbbds1_prim" => "192.168.56.41",
+    #  "db_p_dbbds1_repl" => "192.168.56.42",
+    #  "db_p_dbbds2_prim" => "192.168.56.43",
+    #  "db_p_dbbds2_repl" => "192.168.56.44"
+    }
+
+    nodes.each do |name, ip|
+      config.vm.define name do |node|
+        node.vm.hostname = name
+        node.vm.hostname = name.gsub('_', '-') # libvirt might reject underscores _ in the hostname field
+        node.vm.network "private_network", ip: ip
+        node.vm.provider :libvirt do |v|
+          v.memory = 1024
+          v.cpus = 1
+        end
+      end
+    end
+  end
