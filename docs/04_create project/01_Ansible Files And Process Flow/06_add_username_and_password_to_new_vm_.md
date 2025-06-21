@@ -50,7 +50,8 @@ To recreate a VM after updating its configuration (e.g. username or password), f
 1. **Destroy the current VM**:
 
    ```bash
-   vagrant destroy db_d_dbbds1_prim --provider=libvirt -f
+   cd vagrant
+   vagrant destroy db_d_dbbds1_prim  -f
    ```
 
    > `-f` forces the destruction without asking for confirmation.
