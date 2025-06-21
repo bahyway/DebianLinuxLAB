@@ -29,6 +29,14 @@ project-root/
 
 ---
 
+## ⚙️ VM Base Image and Creation Strategy
+
+All VMs will be **minimal servers** (no GUI) based on **RHEL 8**. However, due to subscription limitations, **CentOS 8** will be used as a substitute.
+
+> 🧠 **Performance Tip**: It is safer to create and provision VMs **one-by-one** instead of all at once to prevent system crashes, especially on lower-spec Debian 12 VDIs.
+
+---
+
 ## 📦 Step-by-Step Setup
 
 ### 1️⃣ `Vagrantfile` - Create First VM (Scalable to More)
@@ -36,7 +44,7 @@ project-root/
 ```ruby
 Vagrant.configure("2") do |config|
   config.vm.define "vm1" do |vm1|
-    vm1.vm.box = "debian/bookworm64"
+    vm1.vm.box = "centos/8"
     vm1.vm.hostname = "vm1"
     vm1.vm.provider :libvirt do |lv|
       lv.memory = 1024
@@ -46,7 +54,7 @@ Vagrant.configure("2") do |config|
 end
 ```
 
-> 🧠 **Scalability Note**: You can safely extend to more VMs later by adding blocks like `vm2`, `vm3`, etc., without recreating `vm1`.
+> ✅ You can extend this to multiple VMs, but for stability, test one at a time on modest hardware.
 
 ---
 
@@ -95,7 +103,7 @@ Welcome to {{ inventory_hostname }} provisioned by Ansible!
 
 ```yaml
 - name: Install Nginx
-  apt:
+  yum:
     name: nginx
     state: present
 
@@ -117,7 +125,7 @@ Welcome to {{ inventory_hostname }} provisioned by Ansible!
 ### 7️⃣ `roles/nginx/templates/nginx.conf.j2`
 
 ```jinja
-user www-data;
+user nginx;
 worker_processes auto;
 pid /run/nginx.pid;
 events { worker_connections 1024; }
@@ -152,7 +160,7 @@ http {
 1. Start the first VM:
 
 ```bash
-vagrant up --provider=libvirt
+vagrant up vm1 --provider=libvirt
 ```
 
 2. Run the Ansible playbook:
@@ -169,7 +177,7 @@ Just edit the `Vagrantfile`:
 
 ```ruby
 config.vm.define "vm2" do |vm2|
-  vm2.vm.box = "debian/bookworm64"
+  vm2.vm.box = "centos/8"
   vm2.vm.hostname = "vm2"
   vm2.vm.provider :libvirt do |lv|
     lv.memory = 1024
