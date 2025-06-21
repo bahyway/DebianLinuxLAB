@@ -16,44 +16,17 @@ sudo apt install -y python3 python3-pip ffmpeg
 
 #### Option A: Install via pip (Recommended)
 
-> ⚠️ Debian 12 uses an **externally-managed environment** for Python. Direct use of `pip` may fail with an error like `externally-managed-environment`. Work around this using either of these methods:
-
-##### 📦 Method 1: Use a Python Virtual Environment
-
 ```bash
-python3 -m venv ~/.venvs/yt-dlp
-source ~/.venvs/yt-dlp/bin/activate
-pip install -U yt-dlp
+python3 -m pip install -U yt-dlp
 ```
 
-Then run:
+Ensure pip binaries are in your path:
 
 ```bash
-~/.venvs/yt-dlp/bin/yt-dlp <url>
+export PATH="$HOME/.local/bin:$PATH"
 ```
 
-##### 📦 Method 2: Use pipx (clean and isolated)
-
-```bash
-sudo apt install pipx
-pipx install yt-dlp
-```
-
-To run:
-
-```bash
-yt-dlp <url>
-```
-
-##### ⚠️ Avoid `--break-system-packages`
-
-While possible with:
-
-```bash
-python3 -m pip install --break-system-packages -U yt-dlp
-```
-
-It’s **not recommended**, as it can break Debian’s Python system.
+Add the above line to your `~/.bashrc` or `~/.zshrc` to persist it.
 
 #### Option B: Download the Binary
 
@@ -110,51 +83,6 @@ login your_email@example.com
 password your_password
 ```
 
-### 🚫 Handling 403 Forbidden or Redirect Errors
-
-If you encounter:
-
-```
-ERROR: unable to download video data: HTTP Error 403: Forbidden
-```
-
-OR
-
-```
-ERROR: Unsupported URL: https://www.youtube.com/watch%5C%5C=...
-```
-
-Follow these steps:
-
-✅ **Fix URL formatting**: Ensure the URL is properly quoted and not malformed. Avoid copy-pasting with `\` or extra characters. Example:
-
-```bash
-yt-dlp "https://www.youtube.com/watch?v=HfNKpT2jo7U"
-```
-
-✅ **Avoid smart quotes or shell escaping errors**.
-
-✅ **Use cookies from your browser**:
-
-```bash
-yt-dlp --cookies-from-browser firefox "https://www.youtube.com/watch?v=HfNKpT2jo7U"
-```
-
-✅ **Still blocked? Use cookies.txt manually**:
-
-1. Install [cookies.txt extension](https://addons.mozilla.org/en-US/firefox/addon/cookies-txt/)
-2. Export cookies to a file:
-
-```bash
-yt-dlp --cookies cookies.txt "https://www.youtube.com/watch?v=HfNKpT2jo7U"
-```
-
-✅ **Try with login credentials**:
-
-```bash
-yt-dlp -u your_email@gmail.com -p your_password "https://www.youtube.com/watch?v=HfNKpT2jo7U"
-```
-
 ## 🛠️ Optional Configuration File
 
 Create at: `~/.config/yt-dlp/config`
@@ -167,7 +95,6 @@ Example content:
 -o ~/Videos/%(title)s.%(ext)s
 --embed-thumbnail
 --add-metadata
---cookies-from-browser firefox
 ```
 
 ## 💡 Updating yt-dlp
@@ -183,13 +110,10 @@ yt-dlp -U
 * Always use `-f bestvideo+bestaudio` to ensure high quality.
 * Use `--embed-thumbnail --add-metadata` for organizing your media library.
 * For series or courses: always use `-o '%(playlist_title)s/%(playlist_index)s - %(title)s.%(ext)s'` to preserve order.
-* If login is required, prefer `--netrc`, `--cookies`, or `--cookies-from-browser` to bypass restrictions.
-* Check your terminal for copy/paste errors, smart quotes, or malformed URLs.
-* Use `pipx` or a virtual environment to safely manage Python packages in Debian 12.
+* If login is required, prefer `--netrc` or encrypted password manager over plain text.
 
 ## 📌 Resources
 
 * Official Repo: [https://github.com/yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp)
 * Format selector help: `yt-dlp -F <video_url>`
 * Embed subtitles: `--write-subs --sub-lang en --embed-subs`
-   
