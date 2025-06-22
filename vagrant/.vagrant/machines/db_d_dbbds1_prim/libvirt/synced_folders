@@ -1,1 +1,0 @@
-{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/home/bfadam/DebianLinuxLab/VagrantProjects/DebianLinuxLab_Proj01/DebianLinuxLAB/vagrant","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}}}

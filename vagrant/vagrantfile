@@ -14,13 +14,18 @@ Vagrant.configure("2") do |config|
         v.cpus = 1
       end
 
-      # Set default user and password
+      # Set default user and password     
       node.vm.provision "shell", inline: <<-SHELL
-        useradd -m vagrantuser
-        echo "vagrantuser:vagrantpass" | chpasswd
-        usermod -aG wheel vagrantuser
-        echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/wheel
-      SHELL
+      useradd -m vagrantuser || true
+      echo "vagrantuser:vagrantpass" | chpasswd
+      mkdir -p /home/vagrantuser/.ssh
+      cp /vagrant/.ssh/id_ed25519.pub /home/vagrantuser/.ssh/authorized_keys
+      chown -R vagrantuser:vagrantuser /home/vagrantuser/.ssh
+      chmod 700 /home/vagrantuser/.ssh
+      chmod 600 /home/vagrantuser/.ssh/authorized_keys
+      echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/wheel
+      usermod -aG wheel vagrantuser
+    SHELL
     end
   end
 end
